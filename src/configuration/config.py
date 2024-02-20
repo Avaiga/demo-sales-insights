@@ -25,7 +25,7 @@ import datetime as dt
 
 #Config.configure_job_executions(mode="standalone", nb_of_workers=2)
 
-path_to_data = "data/supermarkt_sales_plus.csv"
+path_to_data = "data/modified_supermarkt_sales_plus.csv"
 
 initial_data_cfg = Config.configure_data_node(id="initial_data",
                                               storage_type="csv",
@@ -40,10 +40,10 @@ final_data_cfg =  Config.configure_data_node(id="final_data")
 
 
 model_arima_cfg = Config.configure_data_node(id="model_arima")
-model_linear_regression_cfg = Config.configure_data_node(id="model_linear_regression")
+model_xgboost_cfg = Config.configure_data_node(id="model_xgboost")
 
 predictions_arima_cfg = Config.configure_data_node(id="predictions_arima")
-predictions_linear_regression_cfg = Config.configure_data_node(id="predictions_linear_regression")
+predictions_xgboost_cfg = Config.configure_data_node(id="predictions_xgboost")
 
 result_cfg = Config.configure_data_node(id="result")
 
@@ -65,29 +65,29 @@ task_forecast_arima_cfg = Config.configure_task(id="task_forecast",
                                       output=predictions_arima_cfg)
 
 
-task_train_linear_regression_cfg = Config.configure_task(id="task_train_linear_regression",
-                                      function=train_linear_regression,
+task_train_xgboost_cfg = Config.configure_task(id="task_train_xgboost",
+                                      function=train_xgboost,
                                       input=final_data_cfg,
-                                      output=model_linear_regression_cfg)
+                                      output=model_xgboost_cfg)
 
-task_forecast_linear_regression_cfg = Config.configure_task(id="task_forecast_linear_regression",
-                                      function=forecast_linear_regression,
-                                      input=[model_linear_regression_cfg, date_cfg],
-                                      output=predictions_linear_regression_cfg)
+task_forecast_xgboost_cfg = Config.configure_task(id="task_forecast_xgboost",
+                                      function=forecast_xgboost,
+                                      input=[model_xgboost_cfg, date_cfg],
+                                      output=predictions_xgboost_cfg)
 
 task_result_cfg = Config.configure_task(id="task_result",
                                       function=concat,
                                       input=[final_data_cfg, 
                                              predictions_arima_cfg, 
-                                             predictions_linear_regression_cfg],
+                                             predictions_xgboost_cfg],
                                       output=result_cfg)
 
 
 scenario_cfg = Config.configure_scenario(id='scenario', task_configs=[task_preprocess_cfg,
                                                                       task_train_arima_cfg,
                                                                       task_forecast_arima_cfg,
-                                                                      task_train_linear_regression_cfg,
-                                                                      task_forecast_linear_regression_cfg,
+                                                                      task_train_xgboost_cfg,
+                                                                      task_forecast_xgboost_cfg,
                                                                       task_result_cfg])
 
 Config.export('configuration/config.toml')

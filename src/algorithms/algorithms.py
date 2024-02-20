@@ -16,7 +16,7 @@ The functions will be imported by the __init__.py file in this folder.
 """
 
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 import datetime as dt
 import numpy as np
 from pmdarima import auto_arima
@@ -24,10 +24,12 @@ from pmdarima import auto_arima
 
 def add_features(data):
     dates = pd.to_datetime(data["Date"])
-    data["Months"] = dates.dt.month
-    data["Days"] = dates.dt.isocalendar().day
-    data["Week"] = dates.dt.isocalendar().week
-    data["Day of week"] = dates.dt.dayofweek
+    data["Months"] = (dates.dt.month - 6)/12
+    data["Days"] = (dates.dt.isocalendar().day - 15)/30
+    data["Week"] = (dates.dt.isocalendar().week - 26)/52
+    data["Day of week"] = (dates.dt.dayofweek - 3.5)/7
+    # Number of days after 30 December 2020
+    data["Index"] = (dates - dt.datetime(2020, 12, 30)).dt.days
     return data
 
 def preprocess(initial_data, holiday, level):
@@ -62,15 +64,15 @@ def forecast(model):
     predictions = model.predict(n_periods=60)
     return np.array(predictions)
 
-def train_linear_regression(train_data):    
+def train_xgboost(train_data):    
     y = train_data['Total']
     X = train_data.drop(['Total','Date'], axis=1)
     
-    model = LinearRegression()
+    model = GradientBoostingRegressor()
     model.fit(X,y)
     return model
 
-def forecast_linear_regression(model, date):
+def forecast_xgboost(model, date):
     dates = pd.to_datetime([date + dt.timedelta(days=i)
                             for i in range(60)])
     X = add_features(pd.DataFrame({"Date":dates}))
@@ -79,7 +81,7 @@ def forecast_linear_regression(model, date):
     return predictions
 
 
-def concat(final_data, predictions_arima, predictions_linear_regression):
+def concat(final_data, predictions_arima, predictions_xgboost):
     date = final_data['Date'].max()
 
     def  _convert_predictions(final_data, predictions, date, label='Predictions'):
@@ -92,5 +94,5 @@ def concat(final_data, predictions_arima, predictions_linear_regression):
         return final_data.merge(predictions, on="Date", how="outer")
 
     result_arima = _convert_predictions(final_data, predictions_arima, date, label='ARIMA')
-    result_linear_regression = _convert_predictions(final_data, predictions_linear_regression, date, label='Linear Regression')
-    return result_arima.merge(result_linear_regression, on=["Date", 'Total'], how="outer").sort_values(by='Date')
+    result_xgboost = _convert_predictions(final_data, predictions_xgboost, date, label='Xgboost')
+    return result_arima.merge(result_xgboost, on=["Date", 'Total'], how="outer").sort_values(by='Date')

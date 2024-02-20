@@ -84,4 +84,4 @@ additional_data = pd.DataFrame({
 augmented_data = pd.concat([data, additional_data]).reset_index(drop=True)
 
 
-augmented_data.to_csv('data/supermarkt_sales_plus.csv')
+augmented_data.to_csv('data/modified_supermarkt_sales_plus.csv')

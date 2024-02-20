@@ -21,6 +21,7 @@
 <|navbar|>
 </center>
 
-<|Data|expandable|
+<|Data|expandable|expanded=False|
 <|{data}|table|>
 |>
+

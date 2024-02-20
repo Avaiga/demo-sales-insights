@@ -3,7 +3,7 @@ import plotly.express as px
 import taipy.gui.builder as tgb
 
 # Load the dataset
-data = pd.read_csv('data/supermarkt_sales_plus.csv')
+data = pd.read_csv('data/modified_supermarkt_sales_plus.csv')
 
 def create_pie_figure(data, group_by):
     grouped_data = data.groupby(group_by)['Total'].sum().reset_index()
