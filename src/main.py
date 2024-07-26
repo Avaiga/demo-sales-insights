@@ -8,6 +8,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
+
 import taipy as tp
 from taipy.gui import Gui
 
@@ -16,16 +17,14 @@ from configuration import scenario_cfg
 from taipy import Core
 from pages import *
 
-
-pages = {
-    "/": root_page,
-    "Overview": Overview,
-	"Analysis": Analysis,
-	"Predictions": Predictions
-}
-
-
 if __name__ == "__main__":
+    pages = {
+        "/": root_page,
+        "Overview": Overview,
+        "Analysis": Analysis,
+        "Predictions": Predictions
+    }
+
     core = Core()
     core.run()
     # #############################################################################

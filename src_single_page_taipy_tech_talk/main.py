@@ -4,9 +4,6 @@ import plotly.express as px
 import taipy.gui.builder as tgb
 
 
-data = pd.read_csv('data/modified_supermarkt_sales_plus.csv')
-
-
 def create_pie_figure(data, group_by: str):
     grouped_data = data.groupby(group_by)['Total'].sum().reset_index()
     grouped_data['Total'] = grouped_data['Total'].round(2)
@@ -37,29 +34,6 @@ def create_perc_fig(df, group_column):
     fig = px.bar(df, x='Month_Year', y='Percentage', color=group_column, title=f"Evolution of Sales by {group_column} over Time", labels={'Percentage': '% of Total'}, text_auto=True)
     return fig
 
-
-fig_map = create_sales_by_city_map(data)
-
-fig_product_line = create_pie_figure(data, 'Product_line')
-fig_city = create_pie_figure(data, 'City')
-fig_customer_type = create_pie_figure(data, 'Customer_type')
-
-fig_time = create_bar_figure(data, 'Time')
-fig_date = create_bar_figure(data, 'Date')
-
-
-city = ["Bangkok", "Chiang Mai", "Vientiane", "Luang Prabang", "Yangon", "Naypyitaw"]
-
-filtered_data = data.loc[
-    data["City"].isin(city)
-]
-
-fig_product_line_perc = create_perc_fig(filtered_data, 'Product_line')
-fig_city_perc = create_perc_fig(filtered_data, 'City')
-fig_gender_perc = create_perc_fig(filtered_data, 'Gender')
-fig_customer_type_perc = create_perc_fig(filtered_data, 'Customer_type')
-
-
 def on_selector(state):
     filtered_data = state.data.loc[
         state.data["City"].isin(state.city)
@@ -70,53 +44,75 @@ def on_selector(state):
     state.fig_gender_perc = create_perc_fig(filtered_data, 'Gender')
     state.fig_customer_type_perc = create_perc_fig(filtered_data, 'Customer_type')
 
-
-with tgb.Page() as page:
-    tgb.text("# Sales Insights", mode="md")
-
-    with tgb.layout("1 1 1"):
-        with tgb.part():
-            tgb.text("## Total Sales", mode="md")
-            tgb.text("### {int(data['Total'].sum())}", mode="md")
-
-        with tgb.part():
-            tgb.text("## Average Sales", mode="md")
-            tgb.text("### {int(data['Total'].mean())}", mode="md")
-
-        with tgb.part():
-            tgb.text("## Mean Rating", mode="md")
-            tgb.text("### {int(data['Rating'].mean())}", mode="md")
-
-    with tgb.expandable(title="Data", expanded=False):
-        tgb.table("{data}")
-
-    tgb.chart(figure="{fig_map}")
-
-    with tgb.layout("1 1 1"):
-        tgb.chart(figure="{fig_product_line}")
-        tgb.chart(figure="{fig_city}")
-        tgb.chart(figure="{fig_customer_type}")
-    
-    tgb.chart(figure="{fig_time}")
-    tgb.chart(figure="{fig_date}")
-
-    tgb.text("## Analysis", mode="md")
-
-    tgb.selector(value="{city}", lov=["Bangkok", "Chiang Mai", "Vientiane", "Luang Prabang", "Yangon", "Naypyitaw"],
-                 dropdown=True,
-                 multiple=True,
-                 label="Select cities",
-                 class_name="fullwidth",
-                 on_change=on_selector)
-
-    with tgb.layout("1 1"):
-        tgb.chart(figure="{fig_product_line_perc}")
-        tgb.chart(figure="{fig_city_perc}")
-        tgb.chart(figure="{fig_gender_perc}")
-        tgb.chart(figure="{fig_customer_type_perc}")
-
-    
 if __name__ == "__main__":
+    data = pd.read_csv('data/modified_supermarkt_sales_plus.csv')
+
+    fig_map = create_sales_by_city_map(data)
+
+    fig_product_line = create_pie_figure(data, 'Product_line')
+    fig_city = create_pie_figure(data, 'City')
+    fig_customer_type = create_pie_figure(data, 'Customer_type')
+
+    fig_time = create_bar_figure(data, 'Time')
+    fig_date = create_bar_figure(data, 'Date')
+
+
+    city = ["Bangkok", "Chiang Mai", "Vientiane", "Luang Prabang", "Yangon", "Naypyitaw"]
+
+    filtered_data = data.loc[
+        data["City"].isin(city)
+    ]
+
+    fig_product_line_perc = create_perc_fig(filtered_data, 'Product_line')
+    fig_city_perc = create_perc_fig(filtered_data, 'City')
+    fig_gender_perc = create_perc_fig(filtered_data, 'Gender')
+    fig_customer_type_perc = create_perc_fig(filtered_data, 'Customer_type')
+
+
+    with tgb.Page() as page:
+        tgb.text("# Sales Insights", mode="md")
+
+        with tgb.layout("1 1 1"):
+            with tgb.part():
+                tgb.text("## Total Sales", mode="md")
+                tgb.text("### {int(data['Total'].sum())}", mode="md")
+
+            with tgb.part():
+                tgb.text("## Average Sales", mode="md")
+                tgb.text("### {int(data['Total'].mean())}", mode="md")
+
+            with tgb.part():
+                tgb.text("## Mean Rating", mode="md")
+                tgb.text("### {int(data['Rating'].mean())}", mode="md")
+
+        with tgb.expandable(title="Data", expanded=False):
+            tgb.table("{data}")
+
+        tgb.chart(figure="{fig_map}")
+
+        with tgb.layout("1 1 1"):
+            tgb.chart(figure="{fig_product_line}")
+            tgb.chart(figure="{fig_city}")
+            tgb.chart(figure="{fig_customer_type}")
+        
+        tgb.chart(figure="{fig_time}")
+        tgb.chart(figure="{fig_date}")
+
+        tgb.text("## Analysis", mode="md")
+
+        tgb.selector(value="{city}", lov=["Bangkok", "Chiang Mai", "Vientiane", "Luang Prabang", "Yangon", "Naypyitaw"],
+                    dropdown=True,
+                    multiple=True,
+                    label="Select cities",
+                    class_name="fullwidth",
+                    on_change=on_selector)
+
+        with tgb.layout("1 1"):
+            tgb.chart(figure="{fig_product_line_perc}")
+            tgb.chart(figure="{fig_city_perc}")
+            tgb.chart(figure="{fig_gender_perc}")
+            tgb.chart(figure="{fig_customer_type_perc}")
+
     gui = Gui(page)
     gui.run(title="Sales", port=2452)
     

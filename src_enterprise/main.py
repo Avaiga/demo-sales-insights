@@ -8,6 +8,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
+
 import taipy as tp
 from taipy.gui import Gui, notify
 
@@ -17,18 +18,6 @@ from configuration.auth import *
 
 from taipy import Core
 from pages import *
-
-
-pages = {
-    "/": root_page,
-    "login": login_page,
-    "Overview": Overview,
-	"Analysis": Analysis,
-	"Predictions": Predictions,
-    "Admin": Admin,
-}
-
-current_page = "Overview"
 
 def on_navigate(state, page):
     if page not in ["login", "TaiPy_root_page"]:
@@ -41,9 +30,18 @@ def on_navigate(state, page):
     else:
         return page
 
-
-
 if __name__ == "__main__":
+    pages = {
+        "/": root_page,
+        "login": login_page,
+        "Overview": Overview,
+        "Analysis": Analysis,
+        "Predictions": Predictions,
+        "Admin": Admin,
+    }
+
+    current_page = "Overview"
+
     core = Core()
     core.run()
     # #############################################################################
@@ -55,7 +53,6 @@ if __name__ == "__main__":
     # scenario.submit()                                                           #
     # Comment, remove or replace the previous lines with your own use case        #
     # #############################################################################
-
 
     gui = Gui(pages=pages)
     gui.run(title="Sales Enterprise", port=2853, dark_mode=False)
