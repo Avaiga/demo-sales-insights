@@ -187,70 +187,74 @@ def build_city_info(displayed_data):
 
 # Build the main GUI page
 with tgb.Page() as page:
-    with tgb.part(class_name="container"):
-        tgb.text("Sales Insights", class_name="h1 text-center")
+    with tgb.part(class_name="container d-flex"):
+        with tgb.part():
+            tgb.text("Sales Insights", class_name="h1 text-center")
 
-        with tgb.layout("1 1 1", gap="20px", columns__mobile="1"):
-            with tgb.part():
-                build_basic_filters()
-            with tgb.part():
-                build_conversion()
+            with tgb.layout("1 1 1", gap="20px", columns__mobile="1"):
+                with tgb.part():
+                    build_basic_filters()
+                with tgb.part():
+                    build_conversion()
 
-        tgb.html("hr")
+            tgb.html("hr")
 
-        tgb.toggle(
-            value="{selected_view}",
-            lov=["Simple view", "Advanced view", "Raw view"],
-        )
-
-        with tgb.part(render="{selected_view=='Raw view'}"):
-            tgb.table(
-                "{data}",
-                on_action=open_review,
-                filter=True,
+            tgb.toggle(
+                value="{selected_view}",
+                lov=["Simple view", "Advanced view", "Raw view"],
             )
 
-        with tgb.part(render="{selected_view=='Simple view'}"):
-            tgb.table(
-                "{displayed_data}",
-                columns=["Date", "City", "Product_line", "Total", "Review"],
-                group_by__City=True,
-                group_by__Product_line=True,
-                apply_Total="mean",
-                filter=True,
-                on_action=open_review,
+            with tgb.part(render="{selected_view=='Raw view'}"):
+                tgb.table(
+                    "{data}",
+                    on_action=open_review,
+                    filter=True,
+                )
+
+            with tgb.part(render="{selected_view=='Simple view'}"):
+                tgb.table(
+                    "{displayed_data}",
+                    columns=["Date", "City", "Product_line", "Total", "Review"],
+                    group_by__City=True,
+                    group_by__Product_line=True,
+                    apply_Total="mean",
+                    filter=True,
+                    on_action=open_review,
+                )
+
+            with tgb.part(render="{selected_view=='Advanced view'}"):
+                tgb.table(
+                    "{displayed_data}",
+                    columns=[
+                        "City",
+                        "Product_line",
+                        "Total",
+                        "Quantity",
+                        "Tax_5%",
+                        "Total",
+                        "Date",
+                        "Review",
+                    ],
+                    filter=True,
+                    on_action=open_review,
+                )
+
+            def open_info_pane(state):
+                state.show_city_info_pane = True
+
+            tgb.button(
+                "City info",
+                on_action=open_info_pane,
+                id="open_pane",
             )
 
-        with tgb.part(render="{selected_view=='Advanced view'}"):
-            tgb.table(
-                "{displayed_data}",
-                columns=[
-                    "City",
-                    "Product_line",
-                    "Total",
-                    "Quantity",
-                    "Tax_5%",
-                    "Total",
-                    "Date",
-                    "Review",
-                ],
-                filter=True,
-                on_action=open_review,
-            )
-
-        tgb.button(
-            "City info",
-            on_action="{lambda s: s.assign('show_city_info_pane', True)}",
-            id="open_pane",
-        )
-
-        tgb.pane(
-            "Pane content",
+        with tgb.pane(
             open="{show_city_info_pane}",
             width="300px",
+            persistent=True,
             anchor="right",
-            partial="{city_info_partial}",
-        )
+        ):
+            tgb.part(partial="{city_info_partial}")
 
         tgb.dialog(
             page="review_page",
