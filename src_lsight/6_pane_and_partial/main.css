@@ -1,0 +1,9 @@
+.taipy-table{
+    max-width:98vw;
+}
+
+#open_pane {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
