@@ -1,8 +1,9 @@
 from data.data import data
-from pages.annex.pane import build_city_info_partial, build_pane
-from pages.annex.dialog import open_review, build_dialog
-import taipy.gui.builder as tgb
+from .annex.pane import *
+from .annex.dialog import *
 from state_class import State
+
+import taipy.gui.builder as tgb
 
 # Load and prepare the data
 # Make a copy of the original data for displaying filtered results
@@ -212,4 +213,4 @@ with tgb.Page() as filter_page:
 
         build_pane()
 
-        build_dialog()
+    build_dialog()

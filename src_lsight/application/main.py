@@ -1,7 +1,6 @@
 from taipy.gui import Gui
 from pages.filter_page.filter_page import *
-from pages.annex.dialog import *
-from pages.annex.pane import *
+
 
 
 def on_init(state: State):
