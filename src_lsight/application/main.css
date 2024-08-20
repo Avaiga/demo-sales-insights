@@ -1,5 +1,10 @@
 .taipy-table{
-    max-width:98vw;
+    max-width:80vw;
+}
+
+strong, b {
+    font-weight: bold; /* This is equivalent to 700 */
+    color: #ff6049;
 }
 
 #open_pane {

@@ -2,7 +2,6 @@ from taipy.gui import Gui, notify
 import pandas as pd
 import plotly.express as px
 import taipy.gui.builder as tgb
-from state_class import State
 import json
 
 # Load and prepare data
@@ -138,13 +137,13 @@ with tgb.Page() as page:
             lov=["Simple view", "Advanced view", "Raw view"],
         )
 
-        with tgb.part(render=True):  # TODO: make render work
+        with tgb.part(render="{selected_view=='Raw View'}"):  # TODO: make render work
             tgb.table(
                 "{data}",
                 filter=True,
             )
 
-        with tgb.part(render=True):  # TODO: make render work
+        with tgb.part(render="{selected_view=='Simple view'}"):  # TODO: make render work
             tgb.table(
                 "{displayed_data}",
                 columns=["Date", "City", "Product_line", "Total", "Review"],
@@ -154,7 +153,7 @@ with tgb.Page() as page:
                 filter=True,
             )
 
-        with tgb.part(render=True):  # TODO: make render work
+        with tgb.part(render="{selected_view=='Advanced view'}"):  # TODO: make render work
             tgb.table(
                 "{displayed_data}",
                 columns=[
