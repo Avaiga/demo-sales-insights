@@ -7,7 +7,6 @@ from state_class import State
 selected_row_for_review = None  # Holds the data of the selected row for review
 rate_info = "Good"  # Default value for rating the information
 rate_price = "Good"  # Default value for rating the price
-open_dialog_review = False  # Controls the visibility of the review dialog
 
 
 # Function to handle the review submission
@@ -43,26 +42,13 @@ def send_review(state: State, id: str, payload: dict):
 def open_review(state: State, var_name: str, payload: dict):
     # Get the index of the selected row
     index = payload["index"]
-
+    print(index, var_name)
     # Copy the data from the state and select the specific row
     data = getattr(state, var_name).copy()
     state.selected_row_for_review = data.iloc[index].to_frame().T
 
     # Open the review dialog
     state.open_dialog_review = True
-
-
-# Function to build the review dialog
-def build_dialog():
-    # Create a dialog for reviewing the selected row
-    tgb.dialog(
-        page="review_page",  # The page content to display in the dialog
-        open="{open_dialog_review}",  # Control visibility with a state variable
-        on_action=send_review,  # Function to handle actions (Cancel/Send)
-        labels=["Cancel", "Send"],  # Labels for the dialog buttons
-        width="500px",
-        title="Review the selected row",
-    )
 
 
 # Build the review page content

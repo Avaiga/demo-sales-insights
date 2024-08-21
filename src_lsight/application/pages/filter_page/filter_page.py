@@ -18,6 +18,7 @@ selected_prices = [0, 5000]
 selected_city = "All"
 selected_product_line = "All"
 selected_branch = "All"
+open_dialog_review = False  # Controls the visibility of the review dialog
 
 
 # Function to filter the data based on selected criteria
@@ -138,6 +139,14 @@ def build_conversion():
 
 # Function to build the main GUI page
 with tgb.Page() as filter_page:
+    tgb.dialog(
+        page="review_page",  # The page content to display in the dialog
+        open="{open_dialog_review}",  # Control visibility with a state variable
+        on_action=send_review,  # Function to handle actions (Cancel/Send)
+        labels=["Cancel", "Send"],  # Labels for the dialog buttons
+        width="500px",
+        title="Review the selected row",
+    )
     # container is just a style element
     # d-flex serves to put the pane side by side with the page
     with tgb.part(class_name="container d-flex"):
@@ -212,5 +221,3 @@ with tgb.Page() as filter_page:
         )
 
         build_pane()
-
-    build_dialog()
