@@ -25,8 +25,8 @@ def creates_pages(pages):
 with tgb.Page() as root_page:
     with tgb.part("header sticky"):
         with tgb.layout(
-            "110px 10rem 1 9rem",
-            columns__mobile="110px 10rem 1 35rem",
+            "100px 12rem 1 8rem 150px",
+            columns__mobile="100px 12rem 1 8rem 150px",
             class_name="header-content",
         ):
             tgb.image("favicon.png", width="50px")
@@ -34,6 +34,7 @@ with tgb.Page() as root_page:
             tgb.navbar(
                 lov="{creates_pages(pages)}",
             )
+            tgb.part()
 
             tgb.text(
                 "Welcome **back**!",
