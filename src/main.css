@@ -14,7 +14,7 @@ strong, b {
 
 .header.sticky{
     overflow:auto;
-    z-index: 1000;
+    z-index: 2;
 }
 
 .header-content{
@@ -22,7 +22,7 @@ strong, b {
     margin-right: 7%;
 }
 
-.MuiButtonBase-root.MuiTab-root{
+.header .MuiButtonBase-root.MuiTab-root{
     border: 1px solid var(--color-primary); /* Thin line with 1px width, change color as needed */
     border-radius: 25px; /* Adjust this value for more or less rounding */
     padding: 10px; /* Optional: adds padding inside the rounded border */
@@ -31,7 +31,7 @@ strong, b {
     width: 12%;
 }
 
-.MuiButtonBase-root.MuiTab-root.Mui-selected{
+.header .MuiButtonBase-root.MuiTab-root.Mui-selected{
     background-color: var(--color-primary);
     color: white;
 }
@@ -50,5 +50,5 @@ strong, b {
 }
 
 .taipy-chart{
-    margin:3px;
+    margin:5px;
 }
