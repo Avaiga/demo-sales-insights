@@ -1,5 +1,20 @@
 [TAIPY]
 
+[JOB]
+mode = "standalone"
+
+[CORE]
+storage_folder = ".user_data"
+repository_type = "filesystem"
+core_version = "4.0.0.dev0"
+
+[CORE.repository_properties]
+mongodb_hostname = "localhost"
+mongodb_user = "taipy"
+mongodb_password = "taipy"
+mongodb_port = "27017:int"
+application_db = "demo-cluster-mode-dev"
+
 [DATA_NODE.initial_data]
 storage_type = "csv"
 scope = "GLOBAL:SCOPE"

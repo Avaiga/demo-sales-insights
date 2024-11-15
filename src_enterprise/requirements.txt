@@ -1,4 +1,4 @@
-taipy-enterpise
+taipy-enterprise
 scikit-learn
 pmdarima
 plotly

@@ -1,5 +1,5 @@
 numpy==1.24.2
-taipy==4.0.0.dev0
+taipy==4.0.1
 statsmodels
 scikit-learn
 pmdarima

@@ -21,7 +21,63 @@ from taipy import Config
 
 from taipy.config import Config, Scope
 import datetime as dt
+import os
 
+
+
+job_execution_mode = os.environ.get("JOB_EXECUTION_MODE", "standalone")
+repository_type = "filesystem" # os.environ.get("REPOSITORY_TYPE", "filesystem")
+mongo_host = os.environ.get("MONGO_HOST", "localhost")
+mongo_port = int(os.environ.get("MONGO_PORT", 27017))
+mongo_user = os.environ.get("MONGO_USER", "taipy")
+mongo_password = os.environ.get("MONGO_PASSWORD", "taipy")
+mongo_app_db = os.environ.get("MONGO_APP_DB", "demo-cluster-mode-dev")
+
+Config.configure_job_executions(mode=job_execution_mode)
+Config.configure_core(
+       storage_folder=".user_data",
+       repository_type=repository_type,
+       repository_properties={
+       "mongodb_hostname": mongo_host,
+       "mongodb_user": mongo_user,
+       "mongodb_password": mongo_password,
+       "mongodb_port": mongo_port,
+       "application_db": mongo_app_db,
+       },
+)
+
+def _connect_mongodb(
+    db_host: str, db_port: int, db_username: str, db_password: str, db_extra_args: frozenset, db_driver: str
+):
+    """Create a connection to a Mongo database.
+    The `"mongodb_extra_args"` passed by the user is originally a dictionary, but since `@lru_cache` wrapper only
+    accepts hashable parameters, the `"mongodb_extra_args"` should be converted into a frozenset beforehand.
+
+    Parameters:
+        db_host (str): the database host.
+        db_port (int): the database port.
+        db_username (str): the database username.
+        db_password (str): the database password.
+        db_extra_args (frozenset): A frozenset converted from a dictionary of additional arguments to be passed into
+            database connection string.
+    Returns:
+        pymongo.MongoClient
+    """
+    auth_str = ""
+    if db_username and db_password:
+        auth_str = f"{db_username}:{db_password}@"
+
+
+    driver = "mongodb"
+    if db_driver:
+        driver = f"{driver}+{db_driver}"
+
+    connection_string = f"{driver}://{auth_str}{db_host}"
+    connection_string = connection_string if db_driver else f"{connection_string}:{db_port}"
+
+    return connection_string
+
+conn_str = _connect_mongodb(mongo_host, mongo_port, mongo_user, mongo_password, None, mongo_app_db)
 
 #Config.configure_job_executions(mode="standalone", nb_of_workers=2)
 
