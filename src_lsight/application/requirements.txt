@@ -1,4 +1,0 @@
-taipy==4.0.0.dev0
-scikit-learn
-pmdarima
-plotly
