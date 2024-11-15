@@ -15,7 +15,57 @@ Page content is imported from the root.md file.
 
 Please refer to https://docs.taipy.io/en/latest/manuals/gui/pages for more details.
 """
+import taipy.gui.builder as tgb
 
-from taipy.gui import Markdown
 
-root_page = Markdown("pages/root.md")
+def creates_pages(pages):
+    return [(f"/{page}", page.replace("_", " ").title()) for page in list(pages)[1:]]
+
+
+with tgb.Page() as root_page:
+    with tgb.part("header sticky"):
+        with tgb.layout(
+            "110px 10rem 1 9rem",
+            columns__mobile="110px 10rem 1 35rem",
+            class_name="header-content",
+        ):
+            tgb.image("favicon.png", width="50px")
+            tgb.text("Sales **Dashboard**", mode="md")
+            tgb.navbar(
+                lov="{creates_pages(pages)}",
+            )
+
+            tgb.text(
+                "Welcome **back**!",
+                mode="md",
+            )
+
+    with tgb.part("content"):
+        with tgb.layout(columns="1 1 1"):
+            with tgb.part():
+                tgb.text("# **Total** sales:", mode="md")
+                tgb.text(lambda data: f"### US $ {int(data['Total'].sum())}", mode="md")
+
+            with tgb.part():
+                tgb.text("# Average **Rating**:", mode="md")
+                tgb.text(
+                    lambda data: f"### {round(data['Rating'].mean(), 1)}", mode="md"
+                )
+
+            with tgb.part():
+                tgb.text("# Average **Sales**:", mode="md")
+                tgb.text(
+                    lambda data: f"### US $ {round(data['Total'].mean(), 2)}", mode="md"
+                )
+
+        with tgb.expandable(
+            title="Data",
+            expanded=False,
+        ):
+            tgb.table("{data}")
+
+        tgb.html("br")
+
+        tgb.content()
+
+        tgb.toggle(theme=True)

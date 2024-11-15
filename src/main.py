@@ -40,4 +40,4 @@ if __name__ == "__main__":
     # #############################################################################
 
     gui = Gui(pages=pages)
-    gui.run(title="Sales Prediction")
+    gui.run(title="Sales Prediction", margin="0px")
