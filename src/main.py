@@ -11,7 +11,6 @@
 import taipy as tp
 from taipy.gui import Gui
 from algorithms import *
-from taipy import Orchestrator
 
 pd.options.mode.chained_assignment = None
 
@@ -27,8 +26,7 @@ if __name__ == "__main__":
         "Admin": Admin,
     }
 
-    core = Orchestrator()
-    core.run()
+    tp.Orchestrator().run()
     # #############################################################################
     # PLACEHOLDER: Create and submit your scenario here                           #
     #                                                                             #

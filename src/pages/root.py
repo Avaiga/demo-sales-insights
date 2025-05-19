@@ -32,7 +32,7 @@ with tgb.Page() as root_page:
             tgb.image("favicon.png", width="50px")
             tgb.text("Sales **Dashboard**", mode="md")
             tgb.navbar(
-                lov="{creates_pages(pages)}",
+                lov=lambda pages: creates_pages(pages),
             )
             tgb.part()
 

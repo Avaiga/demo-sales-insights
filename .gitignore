@@ -22,3 +22,4 @@ src_enterprise/configuration/config.toml
 src_enterprise/Dockerfile
 src_enterprise/pages/Predictions/Predictions.md
 src_enterprise/requirements.txt
+*.lock

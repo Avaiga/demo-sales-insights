@@ -123,15 +123,15 @@ with tgb.Page() as page:
     with tgb.layout("1 1 1"):
         with tgb.part():
             tgb.text("## Total Sales", mode="md")
-            tgb.text("### {int(data['Total'].sum())}", mode="md")
+            tgb.text(lambda data: f"### {int(data['Total'].sum())}", mode="md")
 
         with tgb.part():
             tgb.text("## Average Sales", mode="md")
-            tgb.text("### {int(data['Total'].mean())}", mode="md")
+            tgb.text(lambda data: f"### {int(data['Total'].mean())}", mode="md")
 
         with tgb.part():
             tgb.text("## Mean Rating", mode="md")
-            tgb.text("### {int(data['Rating'].mean())}", mode="md")
+            tgb.text(lambda data: f"### {int(data['Rating'].mean())}", mode="md")
 
     with tgb.expandable(title="Data", expanded=False):
         tgb.table("{data}")

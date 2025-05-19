@@ -1,7 +1,6 @@
 import pandas as pd
 import plotly.express as px
 import taipy.gui.builder as tgb
-import os
 from data.get_data import data
 
 
@@ -70,13 +69,13 @@ fig_customer_type = create_pie_figure(data, "Customer_type")
 
 with tgb.Page() as Overview:
     # Sales by City Map
-    tgb.chart(figure="{create_sales_by_city_map(data)}", height="600px")
+    tgb.chart(figure=lambda data: create_sales_by_city_map(data), height="600px")
 
     with tgb.layout(columns="1 1 1", columns__mobile="1"):
         tgb.chart(figure="{fig_product_line}")
         tgb.chart(figure="{fig_city}")
         tgb.chart(figure="{fig_customer_type}")
 
-    tgb.chart(figure="{create_bar_figure(data, 'Time')}")
+    tgb.chart(figure=lambda data: create_bar_figure(data, "Time"))
 
-    tgb.chart(figure="{create_bar_figure(data, 'Date')}")
+    tgb.chart(figure=lambda data: create_bar_figure(data, "Date"))

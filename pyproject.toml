@@ -1,0 +1,14 @@
+[project]
+name = "demo-sales-insights"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy==1.24.2",
+    "plotly>=6.1.0",
+    "pmdarima>=2.0.4",
+    "scikit-learn>=1.6.1",
+    "statsmodels>=0.14.4",
+    "taipy==4.0",
+]
